@@ -1,0 +1,52 @@
+{
+  "node": "block",
+  "body": [
+    {
+      "node": "bind",
+      "name": "f",
+      "expr": {
+        "node": "const",
+        "value": {
+          "params": ["a"],
+          "node": "block",
+          "body": [
+            {
+              "node": "if",
+              "cond": {
+                "node": "<",
+                "left": { "node": "var", "name": "a" },
+                "right": { "node": "const", "value": 0 }
+              },
+              "then": {
+                "node": "return",
+                "expr": { "node": "const" }
+              },
+              "else": {
+                "node": "block",
+                "body": [
+                  { "node": "print", "expr": { "node": "var", "name": "a" } },
+                  {
+                    "node": "call",
+                    "func": { "node": "var", "name": "f" },
+                    "args": [
+                      {
+                        "node": "-",
+                        "left": { "node": "var", "name": "a" },
+                        "right": { "node": "const", "value": 1 }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "node": "call",
+      "func": { "node": "var", "name": "f" },
+      "args": [{ "node": "const", "value": 10 }]
+    }
+  ]
+}

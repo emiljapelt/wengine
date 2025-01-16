@@ -46,7 +46,7 @@ const execute = function (ast, env) {
       let f = execute(ast.func, env);
       let args = [];
       for (let i = 0; i < f.params.length; i++)
-        args.push({ name: f.params[i], value: execute(ast.args[i], env) });
+        args.push([f.params[i], execute(ast.args[i], env)]);
       env.binds.push(args);
       execute(f, env);
       let result = env.ret;

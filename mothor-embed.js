@@ -41,12 +41,20 @@ const _return = (_expr) => {
 };
 
 const _let = (_name) => (_expr) => {
-    return { node: 'bind', name:_name, expr:_(_expr) };
+    return { node: 'let', name:_name, expr:_(_expr) };
 }
+
+const _set = (_name) => (_expr) => {
+    return { node: 'set', name:_name, expr:_(_expr) };
+};
 
 const _call = (_func) => (...args) => {
     return { node: 'call', func:_(_func), args:args.map(a => _(a)) };
 };
+
+const _while = (_cond) => (...body) => {
+    return { node: 'while', cond:_(_cond), body:_(...body) }
+}
 
 const _out = (_expr) => {
     return { node: 'print', expr:_(_expr) };

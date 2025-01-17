@@ -71,7 +71,7 @@ const env = (args) => {
   return { binds: [args === undefined ? [] : args], ret: undefined };
 };
 
-const run = (program, args) => {
+const run = (program, ...args) => {
   let environment = env(args);
   switch (typeof program) {
     case "string":

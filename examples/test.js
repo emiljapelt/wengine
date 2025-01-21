@@ -1,9 +1,8 @@
 let program = _(
-    _let('decrease')(_fun()(
-        _set('a')(_('a','-', 1))
-    )),
-    _while('a') (
+    _let('a')(0),
+    _loop() (
         _out('a'),
-        _call('decrease')()
+        _continue,
+        _set('a')(_('a','+',1))
     )
 );

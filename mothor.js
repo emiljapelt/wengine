@@ -24,22 +24,29 @@ const execute = function (ast, env) {
       env.binds.push([]);
       for (const node of ast.body) {
         execute(node, env);
-        if (env.return !== undefined) {
-          env.binds.pop();
-          return;
-        }
+        if (env.return !== undefined || env.breaking || env.continuing) 
+          break;
       }
       env.binds.pop();
       break;
     }
     case 'while': {
+      env.in_loop++;
       while(execute(ast.cond, env)) {
         execute(ast.body, env);
         if (env.return !== undefined) {
           env.binds.pop();
+          env.in_loop++;
           return;
         }
+        if (env.breaking) {
+          env.breaking = false;
+          break;
+        }
+        env.continuing = false;
+        if (ast.incr) execute(ast.incr, env);
       }
+      env.in_loop++;
       break;
     }
     case 'return': {
@@ -84,6 +91,14 @@ const execute = function (ast, env) {
       console.log(execute(ast.expr, env));
       break;
     }
+    case 'break': {
+      if (env.in_loop > 0) env.breaking = true;
+      break;
+    }
+    case 'continue': {
+      if (env.in_loop > 0) env.continuing = true;
+      break;
+    }
     case '+': return execute(ast.left, env) + execute(ast.right, env);
     case '-': return execute(ast.left, env) - execute(ast.right, env);
     case '*': return execute(ast.left, env) * execute(ast.right, env);
@@ -94,7 +109,7 @@ const execute = function (ast, env) {
 };
 
 const env = (args) => {
-  return { binds: [args === undefined ? [] : args], ret: undefined };
+  return { binds: [args === undefined ? [] : args], ret: undefined, in_loop: 0, breaking: false, continuing: false };
 };
 
 const run = (program, ...args) => {

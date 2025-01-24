@@ -1,8 +1,17 @@
 var __generated_var_count__ = 0;
 const _generate_var_ = () => `${__generated_var_count__++}_var`;
 
-const _if = (_cond) => (..._then) => (..._else) => { 
-    return { node: 'if', cond:_cond, then:{ node: 'block', body:_then }, else:{ node: 'block', body:_else } }; 
+const _if = (..._data) => {
+    switch (_data.length)  {
+        case 1:
+            return (..._then) => (..._else) => { 
+                return { node: 'if', cond:_data[0], then:{ node: 'block', body:_then }, else:{ node: 'block', body:_else } }; 
+            }
+        case 2:
+            return { node: 'if', cond:_data[0], then:{ node: 'block', body:[_data[1]] }, else:{ node: 'block', body:[] } }; 
+        default:
+            return { node: 'if', cond:_data[0], then:{ node: 'block', body:[_data[1]] }, else:{ node: 'block', body:data.slice(2) } }; 
+    }
 };
 
 const _v = (_name) => {
@@ -27,20 +36,42 @@ const _ = (...data) => {
             break;
         }
         case 2: {
-            if (typeof data[0] === 'string')
-                return { node:data[0], expr:_(data[1]) };
+            if (typeof data[0] === 'string') {
+                switch (data[0]) {
+                    case '!': return _un(data[0])(data[1]);
+                    default: return _call(data[0])(data[1]);
+                }
+            }
             break;
         }
         case 3: {
-            if (typeof data[1] === 'string')
-                return { node:data[1], left:_(data[0]), right:_(data[2]) };
+            if (typeof data[1] === 'string') {
+                switch (data[1]) {
+                    case '!=':
+                        return _un('!')(_bin(data[0])('=')(data[2]))
+                    case '>':
+                        return _bin(data[2])(data[1])(data[0]);
+                    case '<=':
+                        return _un('!')(_bin(data[2])('<')(data[0]));
+                    case '>=':
+                        return _un('!')(_bin(data[0])('<')(data[2]));
+                    default: /*  +  -  *  =  <  */
+                        return _bin(data[0])(data[1])(data[2]);
+                }
+            }
             break;
+        }
+        default: {
+            if (typeof data[0] === 'string') 
+                return _call(data[0])(data.slice(1));
         }
     }
     return { node: 'block', body:data };
 }
 
 const _return = (_expr) => {
+    if (_expr === undefined)
+        return { node: 'return', expr:_(_c()) };
     return { node: 'return', expr:_(_expr) };
 };
 

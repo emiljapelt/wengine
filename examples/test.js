@@ -1,8 +1,6 @@
 let program = _(
-    _let('a')(0),
-    _loop() (
+    _loop(_('a','<',100)) (
         _out('a'),
-        _continue,
         _set('a')(_('a','+',1))
     )
 );

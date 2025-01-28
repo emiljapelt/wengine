@@ -46,7 +46,7 @@ const execute = function (ast, env) {
         env.continuing = false;
         if (ast.incr) execute(ast.incr, env);
       }
-      env.in_loop++;
+      env.in_loop--;
       break;
     }
     case 'return': {
@@ -113,6 +113,10 @@ const env = (args) => {
 };
 
 const run = (program, ...args) => {
+  if (typeof _wengine_validate !== 'undefined')
+    _wengine_validate(program, _wengine_all_nodes, env(...args));
+  if (typeof _wengine_type !== 'undefined')
+    _wengine_type(program, ...args);
   let environment = env(args);
   switch (typeof program) {
     case 'string':

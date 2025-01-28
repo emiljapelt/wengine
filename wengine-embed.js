@@ -103,7 +103,7 @@ const _loop = (_cond) => (...body) => {
                 _while(_(increaser,'<',limiter), _set(increaser)(_(increaser,'+',1)) )(...body)
             )
         }
-        case 'undefined': return _while(true)(...body);
+        case 'undefined': return _while(_c(1))(...body);
         default: return _while(_cond)(...body);
     }
 };

@@ -63,7 +63,7 @@ const _ = (...data) => {
         }
         default: {
             if (typeof data[0] === 'string') 
-                return _call(data[0])(data.slice(1));
+                return _call(data[0])(...data.slice(1));
         }
     }
     return { node: 'block', body:data };

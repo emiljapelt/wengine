@@ -112,6 +112,9 @@ const env = (args) => {
   return { binds: [args === undefined ? [] : args], ret: undefined, in_loop: 0, breaking: false, continuing: false };
 };
 
+
+
+// example use: run(program, ['a': 2], ['b': true])
 const run = (program, ...args) => {
   if (typeof _wengine_validate !== 'undefined')
     _wengine_validate(program, _wengine_all_nodes, env(...args));

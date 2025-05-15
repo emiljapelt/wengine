@@ -74,6 +74,8 @@ const _return = (_expr) => {
         return { node: 'return', expr:_(_c()) };
     return { node: 'return', expr:_(_expr) };
 };
+_return['node'] = 'return';
+_return['expr'] = _(_c());
 
 const _let = (_name) => (_expr) => {
     return { node: 'let', name:_name, expr:_(_expr) };
